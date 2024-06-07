@@ -1,0 +1,7 @@
+{
+    "require": {
+        "mongodb/mongodb": "^1.19",
+        "setasign/fpdf": "^1.8",
+        "phpmailer/phpmailer": "^6.9"
+    }
+}

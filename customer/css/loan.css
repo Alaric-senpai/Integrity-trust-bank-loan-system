@@ -1,0 +1,115 @@
+.manage-actions{
+    display: grid;
+    grid-template-columns: auto;
+    gap: 20px;
+    /* overflow: hidden; */
+   
+}
+.body{
+    overflow-x: auto;
+}
+.manage-actions .row-top{
+    display: grid;
+    grid-template-columns: 48% 48%;
+    place-items: center;
+    gap: 3%;
+}
+.w-98{
+    width: 97%;
+    margin: 10px auto;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+}
+.loan-holder{
+    display: grid;
+    grid-template-columns: 48% 48%;
+    text-align: left;
+    gap: 3%;
+}
+.loan-holder p, .address p, .max{ 
+    font-size: 25px;
+    font-weight: 400;
+}
+.loan-holder h5, .address h6, .min{
+    font-size: 17px;
+    font-weight: 300;
+}
+.flex-10{
+    gap: 10px;
+}
+label{
+    max-width: 100px;
+    width: 100px;
+}
+.customer-support{
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+}
+input::placeholder{
+    color: white;
+}
+.place-items-center{
+    display: grid;
+    place-items: center;
+}
+.grid-2{
+    display: flex;
+    grid-template-columns: auto auto;
+    gap: 10px;
+}
+.explore-action{
+    text-align: right;
+}
+.like{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-block: 20px;
+    text-align: left;
+}
+a img{
+    width: 50px;
+}
+.explore-profile{
+    overflow: hidden;
+    max-height: 400px;
+}
+.notice{
+    position:fixed;
+    top: 40px;
+    right: 30px;
+    display: grid;
+    grid-template-columns: 85% 15%;
+    gap: 10px;
+
+}
+@media only screen and (max-width: 800px){
+    .loan-holder{
+        display: grid;
+        /* background-color: red; */
+        grid-template-columns: auto;
+    }
+    body{
+        overflow: auto;
+    }
+    .manage-actions .row-top{
+        display: grid;
+        grid-template-columns: auto;
+        gap: 15px;
+        width: 75%;
+        margin: 10px auto;
+    }
+    .manage-actions{
+        overflow-x: auto !important;
+        gap: 10px;
+    }
+    .customer-support{
+        display: grid;
+        grid-template-columns: auto;
+        gap: 20px;
+    }
+}
