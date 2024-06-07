@@ -60,7 +60,12 @@ require 'config/database.php';
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> 
                 </div>
             </div>
-            <?php } ?>
+            <?php }else{
+                $fullname = $user['firstname']. " ".$user['lastname']; 
+                $subject = "welcome";
+                $message ="welcome to integrity loan system";
+                require '../mail.php';
+            } ?>
             <div class="rows w-98">
                 <div class="s-card">
                     <h3>Total loans</h3>

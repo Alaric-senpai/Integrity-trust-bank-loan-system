@@ -31,6 +31,7 @@ try {
                 'email' => $email,
                 'id_number' => $idnum,
                 'phone_number' => $phone,
+                'usertype '=> 'customer',
             ]);
 
             if ($userinsert) {

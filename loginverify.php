@@ -21,7 +21,14 @@ if(isset($_POST['login'])){
                         //code...
                         $token = $userset['token'];
                         $_SESSION['token'] = $token;
-                        header("location:customer/dashboard.php");     
+                        if($query['usertype'] == "customer"){
+                            header("location:customer/dashboard.php");
+                            exit();     
+                        }elseif($query['usertype'] == "admin"){
+                            header("location:admin/dashboard.php");     
+                            exit();
+
+                        }
                     } catch (Exception $e) {
                         //throw $th;
                         echo $e->getMessage();
