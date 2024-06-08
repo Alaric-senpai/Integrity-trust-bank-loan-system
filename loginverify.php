@@ -1,56 +1,62 @@
 <?php
 require 'client.php';
+session_start(); // Make sure session is started if not already
+
 $users = $database->users;
 $login = $database->login;
 
-if(isset($_POST['login'])){
+if (isset($_POST['login'])) {
     try {
-        //code...
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'];
 
-        $query = $users->find(['email'=> $email]);
+        // Find the user in the users collection
+        $loginuser = $users->findOne(['email' => $email]);
 
-        if($query){
-            $userset = $login->findOne(['email' => $email]);
-            if($userset){
+        if ($loginuser) {
+            // Find the user in the login collection
+            $loginDetails = $login->findOne(['email' => $email]);
+            
+            if ($loginDetails) {
+                $hashedPassword = $loginDetails['password'];
 
-                $ddpass = $userset['password'];
-                if(password_verify($password, $ddpass)){
+                if (password_verify($password, $hashedPassword)) {
                     try {
-                        //code...
-                        $token = $userset['token'];
+                        $token = $loginDetails['token'];
                         $_SESSION['token'] = $token;
-                        if($query['usertype'] == "customer"){
-                            header("location:customer/dashboard.php");
-                            exit();     
-                        }elseif($query['usertype'] == "admin"){
-                            header("location:admin/dashboard.php");     
-                            exit();
+                        $_SESSION['usertype'] = $loginuser['usertype']; // Store usertype in session
 
+                        if ($loginuser['usertype'] == "customer") {
+                            header("Location: customer/dashboard.php");
+                            exit();
+                        } elseif ($loginuser['usertype'] == "admin") {
+                            header("Location: admin/dashboard.php");
+                            exit();
                         }
                     } catch (Exception $e) {
-                        //throw $th;
                         echo $e->getMessage();
                         die();
                     }
-                                   
+                } else {
+                    $_SESSION['error'] = "Invalid password";
+                    header("Location: login.php");
+                    exit();
                 }
-            }else{
-                $_SESSION['error'] = "invalid credentials";
-                header("location:login.php");
+            } else {
+                $_SESSION['error'] = "User not found in login collection";
+                header("Location: login.php");
                 exit();
             }
-                
-        }else{
-            $_SESSION['error'] = "invalid credentials";
-            header("location:login.php");
+        } else {
+            $_SESSION['error'] = "User not found in users collection";
+            header("Location: login.php");
             exit();
         }
-
-
     } catch (Exception $e) {
-        //throw $th;
-        printf($e->getMessage());
+        printf("Error: %s", $e->getMessage());
     }
+} else {
+    header("Location: index.php");
+    exit();
 }
+?>

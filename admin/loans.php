@@ -7,7 +7,7 @@ require '../client.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin dashboard</title>
+    <title>Loans management</title>
     <?php require '../favicon.php' ?>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -44,10 +44,6 @@ require '../client.php';
                         <input type="number" name="duration" id="duration" required class="form-control">
                     </div>
                     <div class="input-group mb-3">
-                        <label for="amount" class="input-group-text text-bg-success text-white">Loan amount</label>
-                        <input type="number" name="amount" id="amount" required class="form-control">
-                    </div>
-                    <div class="input-group mb-3">
                         <label for="process" class="input-group-text text-bg-success text-white">Application process</label>
                         <input type="text" name="process" id="process" required class="form-control">
                     </div>
@@ -67,8 +63,8 @@ require '../client.php';
                         <input class="form-check-input" type="checkbox" id="check1" name="student" value="student">
                         <label class="form-check-label" for="check1">Student</label><br>
 
-                        <input class="form-check-input" type="checkbox" id="check2" name="payday" value="payday">
-                        <label class="form-check-label" for="check2">Payday</label><br>
+                        <input class="form-check-input" type="checkbox" id="check2" name="affordable" value="affordable">
+                        <label class="form-check-label" for="check2">Affordable</label><br>
 
                         <input class="form-check-input" type="checkbox" id="check3" name="mortgage" value="mortgage">
                         <label class="form-check-label" for="check3">Mortgage</label><br>
@@ -88,14 +84,14 @@ require '../client.php';
                         <input class="form-check-input" type="checkbox" id="check8" name="refinance" value="refinance">
                         <label class="form-check-label" for="check8">Refinance</label><br>
 
-                        <input class="form-check-input" type="checkbox" id="check9" name="collateral" value="collateral">
-                        <label class="form-check-label" for="check9">Collateral</label><br>
+                        <input class="form-check-input" type="checkbox" id="check9" name="low_fee" value="low_fee">
+                        <label class="form-check-label" for="check9">Low-fee</label><br>
 
-                        <input class="form-check-input" type="checkbox" id="check10" name="online" value="online">
-                        <label class="form-check-label" for="check10">Online</label>
+                        <input class="form-check-input" type="checkbox" id="check10" name="cheap" value="cheap">
+                        <label class="form-check-label" for="check10">Cheap</label>
                     </div>
                     <div class="mb-3">
-                        <button type="submit" name="register" class="btn btn-primary">Register loan</button>
+                        <button type="submit" name="register" class="btn btn-primary" name="register">Register loan</button>
                     </div>
                 </form>
         </div>

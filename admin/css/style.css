@@ -31,7 +31,11 @@ html{
     background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
 
 }
+.hello{
+    background-color: #D9AFD9;
+background-image: linear-gradient(0deg, #D9AFD9 0%, #97D9E1 100%);
 
+}
 .container-full{
     width: 100dvw;
     height: 100dvh;
@@ -39,6 +43,9 @@ html{
     display: grid;
     position: relative;
     grid-template-columns: 20% 80%;
+}
+.input-group-text{
+    width: 200px;
 }
 .menu{
     
@@ -120,19 +127,26 @@ html{
     grid-template-columns: 50% 50%;
     margin: 40px auto;
     gap: 10px;
-    max-height: 500px;
+    max-height: 550px;
     overflow: hidden;
     background-color: #1F2041;
 }
 .profile{
+    /* max-height: 470px; */
     overflow: hidden;
 }
 .profile img{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* object-position: center; */
 }
 .form{
     background-color: #1F2041;
 
 }
+.btns{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 10px;
+} 

@@ -9,7 +9,6 @@ try {
     $users->createIndex(['email' => 1], ['unique' => true]);
     $users->createIndex(['id_number' => 1], ['unique' => true]);
     $login->createIndex(['email' => 1], ['unique' => true]);
-    $login->createIndex(['id_number' => 1], ['unique' => true]);
 
     if (isset($_POST['signup'])) {
         $newemail = $_POST['email'];
@@ -17,21 +16,20 @@ try {
         $password = $_POST['password'];
         $cpass = $_POST['cpassword'];
         $phone = $_POST['phone'];
-
+        $usertype = "customer";
         $email = filter_var($newemail, FILTER_SANITIZE_EMAIL);
 
         if ($password === $cpass) {
             $hashpass = password_hash($password, PASSWORD_DEFAULT);
-
             $tokenkey = $email . $idnum . $phone;
             $token = hash('sha256', $tokenkey);
-
+            
             // Insert user details into the users collection
             $userinsert = $users->insertOne([
                 'email' => $email,
                 'id_number' => $idnum,
                 'phone_number' => $phone,
-                'usertype '=> 'customer',
+                'usertype' => $usertype,
             ]);
 
             if ($userinsert) {
