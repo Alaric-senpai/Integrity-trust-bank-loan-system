@@ -15,14 +15,23 @@ require '../client.php';
     <div class="container-full">
         <?php require './config/sidebar.php' ?>
         <div class="content">
-        <div class="alert alert-success alert-dismissible notice">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            <strong>Success!</strong> Loan registered sucessfully
-        </div>
+            <?php
+            if(isset($_SESSION['loan_ok'])){
+
+            
+            ?>
+                <div class="alert alert-success alert-dismissible notice">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <strong>Success!</strong> <?php echo $_SESSION['loan_ok']; ?>
+                </div>
+            <?php
+            unset($_SESSION['loan_ok']);
+            }
+            ?>
         <div class="w-98 ">
             <h4>Loan Listing</h4>
             
-                <form action="#" method="post" class="w-75 m-auto">
+                <form action="./php/loan_listing.php" method="post" class="w-75 m-auto">
                     <div class="input-group mb-3">
                         <label for="name" class="input-group-text text-bg-success text-white">Loan Name</label>
                         <input type="text" name="name" id="name" required class="form-control">
@@ -33,7 +42,7 @@ require '../client.php';
                     </div>
                     <div class="input-group mb-3">
                         <label for="interest" class="input-group-text text-bg-success text-white">Loan interest rate (P/A) </label>
-                        <input type="number" name="interest" id="interest" required class="form-control">
+                        <input type="number" name="interest" id="interest" required class="form-control" step="0.1">
                     </div>
                     <div class="input-group mb-3">
                         <label for="amount" class="input-group-text text-bg-success text-white">Loan amount</label>
@@ -42,6 +51,10 @@ require '../client.php';
                     <div class="input-group mb-3">
                         <label for="duration" class="input-group-text text-bg-success text-white">Loan duration months</label>
                         <input type="number" name="duration" id="duration" required class="form-control">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="applicant" class="input-group-text text-bg-success text-white">N0 of co-signers</label>
+                        <input type="number" name="applicant" id="applicant" required class="form-control">
                     </div>
                     <div class="input-group mb-3">
                         <label for="process" class="input-group-text text-bg-success text-white">Application process</label>
@@ -60,8 +73,8 @@ require '../client.php';
                         <input type="text" name="quality" id="quality" required class="form-control">
                     </div>
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="check1" name="student" value="student">
-                        <label class="form-check-label" for="check1">Student</label><br>
+                        <input class="form-check-input" type="checkbox" id="check1" name="co_signed" value="co_signed">
+                        <label class="form-check-label" for="check1">Co-signed</label><br>
 
                         <input class="form-check-input" type="checkbox" id="check2" name="affordable" value="affordable">
                         <label class="form-check-label" for="check2">Affordable</label><br>

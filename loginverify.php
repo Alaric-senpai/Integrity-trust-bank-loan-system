@@ -3,7 +3,7 @@ require 'client.php';
 session_start(); // Make sure session is started if not already
 
 $users = $database->users;
-$login = $database->login;
+$login = $database->login_beta;
 
 if (isset($_POST['login'])) {
     try {

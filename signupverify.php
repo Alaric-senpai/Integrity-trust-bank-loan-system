@@ -2,37 +2,43 @@
 require 'client.php';
 
 $users = $database->users;
-$login = $database->login;
+$login = $database->login_beta;
 
 try {
     // Create unique indexes
     $users->createIndex(['email' => 1], ['unique' => true]);
-    $users->createIndex(['id_number' => 1], ['unique' => true]);
     $login->createIndex(['email' => 1], ['unique' => true]);
 
     if (isset($_POST['signup'])) {
         $newemail = $_POST['email'];
-        $idnum = $_POST['idnum'];
         $password = $_POST['password'];
         $cpass = $_POST['cpassword'];
         $phone = $_POST['phone'];
         $usertype = "customer";
         $email = filter_var($newemail, FILTER_SANITIZE_EMAIL);
 
+        // Check if email already exists
+        $existingUserByEmail = $users->findOne(['email' => $email]);
+
+        if ($existingUserByEmail) {
+            $_SESSION['error'] = "Email already exists";
+            header("Location: signup.php");
+            exit();
+        }
+
         if ($password === $cpass) {
             $hashpass = password_hash($password, PASSWORD_DEFAULT);
-            $tokenkey = $email . $idnum . $phone;
+            $tokenkey = $email . $phone . $hashpass;
             $token = hash('sha256', $tokenkey);
-            
+
             // Insert user details into the users collection
             $userinsert = $users->insertOne([
                 'email' => $email,
-                'id_number' => $idnum,
                 'phone_number' => $phone,
                 'usertype' => $usertype,
             ]);
 
-            if ($userinsert) {
+            if ($userinsert->getInsertedCount() === 1) {
                 // Insert login details into the login collection
                 $loginInsert = $login->insertOne([
                     'email' => $email,
@@ -40,7 +46,7 @@ try {
                     'token' => $token,
                 ]);
 
-                if ($loginInsert) {
+                if ($loginInsert->getInsertedCount() === 1) {
                     $_SESSION['regok'] = "Registration was successful";
                     header("Location: success.php");
                     exit();

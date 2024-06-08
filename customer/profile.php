@@ -10,6 +10,14 @@ require './config/database.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Profile page</title>
     <?php require '../favicon.php'; ?>
+    <style>
+        .notice{
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 1000;
+        }
+    </style>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>

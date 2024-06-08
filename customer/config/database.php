@@ -7,7 +7,7 @@ if(!isset($_SESSION['token'])){
 }
 // $token = $_SESSION['token'];
 $users = $database->users;
-$login = $database->login;
+$login = $database->login_beta;
 $loan = $database->loans;
 $userloan = $database->user_loans;
 $token = $_SESSION['token'];

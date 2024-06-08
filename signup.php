@@ -13,27 +13,31 @@ require 'client.php';
 </head>
 <body class="bg-secondary">
     <div class="container-fluid">
-
-    <form action="./signupverify.php" method="post" class="needs-validation w-50 text-bg-dark p-3 rounded-3 m-auto mt-5 d-grid">
-    <div class="mb-1">
-        <p class="alert  w-50  m-auto">
-            <?php
+    <?php
             if(isset($_SESSION['error'])){
-                echo $_SESSION['error'];
-                unset($_SESSION['error']);
+
+            
+            ?>
+                <div class="alert alert-success alert-dismissible notice">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <strong>Notice!</strong> <?php echo $_SESSION['error']; ?>
+                </div>
+            <?php
+            unset($_SESSION['error']);
             }
             ?>
-
-        </p>
+    <form action="./signupverify.php" method="post" class="needs-validation w-50 text-bg-dark p-3 rounded-3 m-auto mt-5 d-grid">
+    <div class="mb-1">
+        
         </div>
         <div class="mb-3 text-center">
             <a href="index.php" class="f-bold m-2 fs-1 text-decoration-none">Integrity Trust Bank</a>
             <h3 class="h1 w-100 text-center f-bold fs-1 lh-1">SIGNUP</h3>
         </div>
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="idnum" class="from-label">Id Number</label>
             <input type="number" name="idnum" id="idnum" class="form-control">
-        </div>
+        </div> -->
         <div class="mb-3">
             <label for="phone" class="form-label">Phone number</label>
             <input type="number" name="phone" id="phone" class="form-control" placeholder="start with country code no plus sign">

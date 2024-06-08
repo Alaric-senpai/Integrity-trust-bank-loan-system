@@ -39,7 +39,7 @@ require 'config/database.php';
             </div>
             <div class="my-4 text-bg-dark w-98 p-4 bordered-2">
                 <h4>
-                    Hello <?php echo $user['username']; ?> ✌✌✌
+                    Hello <?php echo $user['email']; ?> ✌✌✌
                 </h4>
             </div>
             <?php

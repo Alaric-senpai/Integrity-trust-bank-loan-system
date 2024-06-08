@@ -3,6 +3,11 @@
 require '../../client.php';
 
 require '../config/database.php';
+try{
+    $users->createIndex(['id_number' => 1], ['unique' => true]);
+}catch(Exception $e){
+    echo $e->getMessage();
+}
 
 if(isset($_POST['update']) && $_SERVER['REQUEST_METHOD'] == 'POST'){
     $fname= $_POST['name'];
@@ -10,6 +15,13 @@ if(isset($_POST['update']) && $_SERVER['REQUEST_METHOD'] == 'POST'){
     $uname = $_POST['uname'];
     $idnum = $_POST['id_number'];
     $phone = $_POST['phone'];
+
+    $existingUserById = $users->findOne(['id_number' => $idnum]);
+    if ($existingUserById) {
+        $_SESSION['exists'] = "ID number already exists";
+        header("Location:".home."profile_details.php");
+        exit();
+    }
 
     try{
         $recordUpdate = $users->updateOne(
