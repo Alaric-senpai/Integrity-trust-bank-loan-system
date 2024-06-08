@@ -1,10 +1,34 @@
 <?php
 require '../client.php';
-if(!isset($_SESSION['token'])){
-    header("location: login.php");
-    exit();
+require './config/database.php';
+
+// Get the user's current timezone
+$userTimezone = date_default_timezone_set("Africa/Nairobi");
+;
+
+// Set the default timezone to the user's timezone
+date_default_timezone_set($userTimezone);
+
+
+if(isset($_GET['id'])){
+    $loanid = $_GET['id'];
+    // @ts-ignore
+    // @phpstan-ignore-next-line
+    $loanObjectId = new MongoDB\BSON\ObjectId($loanid);
+    $loandetail = $loan->findOne(
+        ['_id' => $loanObjectId]
+    );
+    $amount = $loandetail['amount'];
+    $interest = $loandetail['interest_rate'];
+    $duration = $loandetail['loan_duration'];
+    $type = $loandetail['type'];
+
+}else{
+    $amount="";
+    $type="";
+    $interest="";
+    $duration="";
 }
-$token = $_SESSION['token'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,40 +46,62 @@ $token = $_SESSION['token'];
         <div class="content" id="content">
         <div class="make-payment w-98 text-bg-dark">
                 <h1>Loan Application</h1>
-                <h6>Loan initiated at 12/2/2023 at 11:30 pm</h6>
+                <h6>Loan initiated on <?php echo date("d/m/Y") ?> at <?php echo date("h: i:s a") ?></h6>
                 <br><br>
                 <h3>loan</h3>
                 <hr class="w-98 m-auto border-primary border-3">
                 <form action="#" method="post" class="w-75 p-1">
                     <div class="mb-3 d-flex align-items-center flex-10 w-100 p-2">
-                        <label for="date" class="form-label">loan Date</label>
-                        <input type="date" name="date" id="date" required class="form-control w-50">
-                    </div>
-                    <div class="mb-3 d-flex align-items-center flex-10 w-100 p-2">
                         <label for="applicant">Applicant</label>
-                        <input type="email" name="applicant" id="applicant" placeholder="applicant email" class="form-control w-50">
+                        <input type="email" name="applicant" id="applicant" placeholder="applicant email" class="form-control w-50" value="<?php echo $user['email']; ?>" readonly>
                     </div>
                     <div class="mb-3 d-flex align-items-center flex-10 w-100 p-2">
                         <label for="amount" class="form-label">Amount</label>
-                        <input type="number" name="amount" id="amount" required class="form-control w-50" placeholder="amount in Ksh">
+                        <input type="number" name="amount" id="amount" required class="form-control w-50" placeholder="amount in Ksh"
+                        value="<?php echo  $amount
+                         ?>" <?php if(isset($_GET['id'])){
+                            // echo number_format($loandetail['amount']);
+                            echo "readonly";
+                        } ?>
+                        >
                     </div>
                     <div class="mb-3 d-flex align-items-center flex-10 w-100 p-2">
-                        <label for="period" class="form-label">Period</label>
-                        <input type="text" name="period" id="period" placeholder="loan period in months" class="form-control w-50">
+                        <label for="period" class="form-label">Period (months)</label>
+                        <input type="text" name="period" id="period" placeholder="loan period in months" class="form-control w-50"
+                        value="<?php echo  $duration 
+                         ?>" <?php if(isset($_GET['id'])){
+                            // echo number_format($loandetail['amount']);
+                            echo "readonly";
+                        } ?>
+                        >
                     </div>
                     <div class="mb-3 d-flex align-items-center flex-10 w-100 p-2">
                         <label for="interest" class="form-label">interest rate</label>
-                        <input type="number" name="interest" id="interest" value="5.3" readonly class="form-control w-50" step="0.1">
+                        <input type="number" name="interest" id="interest" value="5.3" readonly class="form-control w-50" step="0.1"
+                        value="<?php echo  $interest
+                         ?>" <?php if(isset($_GET['id'])){
+                            // echo number_format($loandetail['amount']);
+                            echo "readonly";
+                        } ?>
+                        >
                     </div>
 
                     <div class="mb-3 d-flex align-items-center flex-10 w-100 p-2">
                         <label for="type" class="form-label">Loan type</label>
-                        <select name="type" id="type" class="form-control w-50">
+                        <input type="text" name="type" id="type" class="form-control w-50"
+                        value="<?php echo  $type
+                         ?>" <?php if(isset($_GET['id'])){
+                            // echo number_format($loandetail['amount']);
+                            echo "readonly";
+                        } ?>
+                        >
+                        <!-- <select name="type" id="type" class="form-control w-50">
                             <option value="null" selected disabled>Choose loan type</option>
                             <option value="personal">Personal loan</option>
                             <option value="business">Business loan</option>
                             <option value="home">Mortgage Loan</option>
-                        </select>
+                            
+                        </select> -->
                     </div>   
                     
                     <div class="mb-3 d-flex flex-10 w-100">

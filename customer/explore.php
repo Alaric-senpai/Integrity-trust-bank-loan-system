@@ -1,10 +1,8 @@
 <?php
 require '../client.php';
-if(!isset($_SESSION['token'])){
-    header("location: login.php");
-    exit();
-}
-$token = $_SESSION['token'];
+require './config/database.php';
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,162 +36,60 @@ $token = $_SESSION['token'];
                 </div>
             </div>
             <div class="loans text-white">
-                <div class="loan ">
-                    <div class="loan-image">
-                        <img src="https://cdn.pixabay.com/photo/2017/08/30/07/56/money-2696229_640.jpg" alt="loan image">
-                    </div>
-                    <div class="description">
-                        <p class="name">Loan express</p>
-                        <p class="detail combine">Quick approval process</p>
-                        <p class="combine"><span class="type">Express Loan</span> <span class="colateral">No colateral</span></p>
-                        <p class="detail2">Convenient application process</p>
-                        <p class="distro combine">Quick distributement</p>
-                        <p class="tags mt-2">
-                            <span class="tag bg-success p-2">#convenient</span>
-                            <span class="tag bg-success p-2">#easy</span>
-                        </p>
-                    </div>
-                    <div class="action">
-                        <div class="feedback">
-                            <div class="left">
-                                <p class="rate">Good Service</p>
-                                <p class="satisfied">5000 people</p>
+                <?php
+                if(isLoanListNotEmpty($loan)){
+                    $loanslist = $loan->find([]);
+                    foreach($loanslist as $loanitem){
+                ?>
+                    <div class="loan ">
+                        <div class="loan-image">
+                            <img src="https://cdn.pixabay.com/photo/2017/08/30/07/56/money-2696229_640.jpg" alt="loan image">
+                        </div>
+                        <div class="description">
+                            <p class="name"><?php echo $loanitem['name'] ?></p>
+                            <p class="detail combine"><?php echo $loanitem['approval'] ?></p>
+                            <p class="combine"><span class="type"><?php echo $loanitem['name'] ?></span> <span class="colateral"><?php echo $loanitem['collateral'] ?></span></p>
+                            <p class="detail2"><?php echo $loanitem['process'] ?> process</p>
+                            <p class="distro combine"><?php echo $loanitem['approval'] ?></p>
+                            <p class="tags mt-2">
+                                <?php 
+                                foreach($loanitem['tags'] as $tag){
+                                
+                                 ?>
+                                    <span class="tag bg-success p-2">#<?php echo $tag; ?></span>
+                                <?php
+                                }
+                                ?>
+                            </p>
+                        </div>
+                        <div class="action">
+                            <div class="feedback">
+                                <div class="left">
+                                    <p class="rate"><?php echo $loanitem['service_quality'] ?></p>
+                                    <p class="satisfied">5000 people</p>
+                                </div>
+                                <div class="rating bg-success p-3 rounded ">
+                                    9.7
+                                </div>
                             </div>
-                            <div class="rating bg-success p-3 rounded ">
-                                9.7
+                            <div class="details">
+                                <div class="amount">
+                                    Ksh. <?php echo number_format($loanitem['amount']) ?>
+                                </div>
+                                <div class="duration">
+                                    <span class="time"><?php echo $loanitem['loan_duration'] ?> months</span>
+                                    <span class="applicants">1 applicant</span>
+                                </div>
+                            </div>
+                            <div class="act">
+                                <a href="./explore_loan.php?id=<?php echo $loanitem['_id'] ?>" class="btn btn-success">View details</a>
                             </div>
                         </div>
-                        <div class="details">
-                            <div class="amount">
-                                Ksh. 5000
-                            </div>
-                            <div class="duration">
-                                <span class="time">5 years</span>
-                                <span class="applicants">1 applicant</span>
-                            </div>
-                        </div>
-                        <div class="act">
-                            <a href="./explore_loan.php" class="btn btn-success">View details</a>
-                        </div>
                     </div>
-                </div>
-                <div class="loan ">
-                    <div class="loan-image">
-                        <img src="https://images.freeimages.com/images/large-previews/61d/money-3-1423590.jpg?fmt" alt="loan image">
-                    </div>
-                    <div class="description">
-                        <p class="name">Loan express</p>
-                        <p class="detail combine">Quick approval process</p>
-                        <p class="combine"><span class="type">Express Loan</span> <span class="colateral">No colateral</span></p>
-                        <p class="detail2">Convenient application process</p>
-                        <p class="distro combine">Quick distributement</p>
-                        <p class="tags mt-2">
-                            <span class="tag bg-success p-2">#convenient</span>
-                            <span class="tag bg-success p-2">#easy</span>
-                        </p>
-                    </div>
-                    <div class="action">
-                        <div class="feedback">
-                            <div class="left">
-                                <p class="rate">Good Service</p>
-                                <p class="satisfied">5000 people</p>
-                            </div>
-                            <div class="rating bg-success p-3 rounded ">
-                                9.7
-                            </div>
-                        </div>
-                        <div class="details">
-                            <div class="amount">
-                                Ksh. 5000
-                            </div>
-                            <div class="duration">
-                                <span class="time">5 years</span>
-                                <span class="applicants">1 applicant</span>
-                            </div>
-                        </div>
-                        <div class="act">
-                            <a href="#" class="btn btn-success">View details</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="loan ">
-                    <div class="loan-image">
-                        <img src="https://img.freepik.com/premium-photo/hundred-dollars-bill-benjamin-franklin-selective-focus_94046-100.jpg?size=626&ext=jpg" alt="loan image">
-                    </div>
-                    <div class="description">
-                        <p class="name">Loan express</p>
-                        <p class="detail combine">Quick approval process</p>
-                        <p class="combine"><span class="type">Express Loan</span> <span class="colateral">No colateral</span></p>
-                        <p class="detail2">Convenient application process</p>
-                        <p class="distro combine">Quick distributement</p>
-                        <p class="tags mt-2">
-                            <span class="tag bg-success p-2">#convenient</span>
-                            <span class="tag bg-success p-2">#easy</span>
-                        </p>
-                    </div>
-                    <div class="action">
-                        <div class="feedback">
-                            <div class="left">
-                                <p class="rate">Good Service</p>
-                                <p class="satisfied">5000 people</p>
-                            </div>
-                            <div class="rating bg-success p-3 rounded ">
-                                9.7
-                            </div>
-                        </div>
-                        <div class="details">
-                            <div class="amount">
-                                Ksh. 5000
-                            </div>
-                            <div class="duration">
-                                <span class="time">5 years</span>
-                                <span class="applicants">1 applicant</span>
-                            </div>
-                        </div>
-                        <div class="act">
-                            <a href="#" class="btn btn-success">View details</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="loan ">
-                    <div class="loan-image">
-                        <img src="https://images.freeimages.com/images/large-previews/9b5/money-1-1238235.jpg?fmt" alt="loan image">
-                    </div>
-                    <div class="description">
-                        <p class="name">Loan express</p>
-                        <p class="detail combine">Quick approval process</p>
-                        <p class="combine"><span class="type">Express Loan</span> <span class="colateral">No colateral</span></p>
-                        <p class="detail2">Convenient application process</p>
-                        <p class="distro combine">Quick distributement</p>
-                        <p class="tags mt-2">
-                            <span class="tag bg-success p-2">#convenient</span>
-                            <span class="tag bg-success p-2">#easy</span>
-                        </p>
-                    </div>
-                    <div class="action">
-                        <div class="feedback">
-                            <div class="left">
-                                <p class="rate">Good Service</p>
-                                <p class="satisfied">5000 people</p>
-                            </div>
-                            <div class="rating bg-success p-3 rounded ">
-                                9.7
-                            </div>
-                        </div>
-                        <div class="details">
-                            <div class="amount">
-                                Ksh. 5000
-                            </div>
-                            <div class="duration">
-                                <span class="time">5 years</span>
-                                <span class="applicants">1 applicant</span>
-                            </div>
-                        </div>
-                        <div class="act">
-                            <a href="#" class="btn btn-success">Apply Loan</a>
-                        </div>
-                    </div>
-                </div>
+                <?php
+                    }
+                }
+                ?>
             </div>
             <div class="more w-100 d-flex alin-items-center justify-content-center">
                 <a href="./loan.php" class="btn ">Custom loan</a>
