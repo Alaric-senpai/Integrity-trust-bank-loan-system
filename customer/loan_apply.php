@@ -3,11 +3,7 @@ require '../client.php';
 require './config/database.php';
 
 // Get the user's current timezone
-$userTimezone = date_default_timezone_set("Africa/Nairobi");
-;
-
-// Set the default timezone to the user's timezone
-date_default_timezone_set($userTimezone);
+date_default_timezone_set("Africa/Nairobi");
 
 
 if(isset($_GET['id'])){
@@ -24,6 +20,7 @@ if(isset($_GET['id'])){
     $type = $loandetail['type'];
 
 }else{
+    $loanObjectId="";
     $amount="";
     $type="";
     $interest="";
@@ -50,7 +47,7 @@ if(isset($_GET['id'])){
                 <br><br>
                 <h3>loan</h3>
                 <hr class="w-98 m-auto border-primary border-3">
-                <form action="#" method="post" class="w-75 p-1">
+                <form action="./php/loan_details.php?id=<?php echo $loanObjectId; ?>" method="post" class="w-75 p-1">
                     <div class="mb-3 d-flex align-items-center flex-10 w-100 p-2">
                         <label for="applicant">Applicant</label>
                         <input type="email" name="applicant" id="applicant" placeholder="applicant email" class="form-control w-50" value="<?php echo $user['email']; ?>" readonly>
@@ -105,7 +102,7 @@ if(isset($_GET['id'])){
                     </div>   
                     
                     <div class="mb-3 d-flex flex-10 w-100">
-                        <button type="submit" class="btn btn-success">confirm loan</button>
+                        <button type="submit" class="btn btn-success" name="confirm">confirm loan</button>
                         <a type="button" href="./loan_details.php" class="btn btn-success">cancel</a>
 
                     </div>

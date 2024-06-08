@@ -1,0 +1,31 @@
+.loan_confirm{
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 25px;
+}
+.loan_confirm div{
+    background-color: #1A1B41;
+    padding: 15px;
+    border-radius: 20px;
+    transition: all .5s ease;
+    border-right: 3px solid transparent;
+}
+.loan_confirm div:hover{
+    border-right: 3px solid #00FF00;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.loan_confirm .right{
+    text-align: right;
+}
+.confirm_actions{
+    display: flex;
+    /* place-items: center; */
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+.confirm_actions button{
+    width: 100px;
+}
