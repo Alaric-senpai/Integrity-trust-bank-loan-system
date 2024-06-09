@@ -12,11 +12,32 @@ require './config/database.php';
     <title>Explore loan options</title>
     <?php require '../favicon.php'; ?>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .notice{
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            
+        }
+    </style>
 </head>
 <body>
     <div class="container-full">
         <?php require './config/sidebar.php'; require 'invalid.php'; ?>
         <div class="content" id="content">
+        <?php
+            if(isset($_SESSION['loan_added'])){
+
+            
+            ?>
+                <div class="alert alert-success alert-dismissible notice">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <strong>Success!</strong> <?php echo $_SESSION['loan_added']; ?>
+                </div>
+            <?php
+            unset($_SESSION['loan_added']);
+            }
+            ?>
             <div class="navbar container-fluid text-bg-dark top-bar">
                 <div class="intro-top">
                 <i class="fa-solid fa-bars text-white menu-toggle bg-success p-1  rounded" id="toggler">Menu</i>

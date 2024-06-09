@@ -24,6 +24,15 @@ $monthly_interest_rate = ($interest_rate / 100) / 12;
 $monthly_installment = ($amount * $monthly_interest_rate) / (1 - pow(1 + $monthly_interest_rate, -$duration));
 $total_amount_paid = $monthly_installment * $duration;
 $total_interest_paid = $total_amount_paid - $amount;
+
+$total_amount_paid = number_format($total_amount_paid, 2);
+$total_interest_paid = number_format($total_interest_paid, 2);
+$monthly_installment = number_format($monthly_installment, 2);
+
+$appaction_date = new DateTime(); 
+$installmentdate  = clone $appaction_date;
+$interval = new DateInterval("P1M");
+$installmentdate->add($interval);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,31 +61,46 @@ $total_interest_paid = $total_amount_paid - $amount;
                         <h4 class="max">Duration</h4>
                         <p class="min"><?php echo $duration; ?> months</p>
                         <h4 class="max">Loan interest</h4>
-                        <p class="min">Ksh. <?php echo number_format($total_interest_paid, 2); ?></p>
+                        <p class="min">Ksh. <?php echo $total_interest_paid ?></p>
                         <h4 class="max">Total amount to pay</h4>
-                        <p class="min">Ksh. <?php echo number_format($total_amount_paid, 2); ?></p>
+                        <p class="min">Ksh. <?php echo $total_amount_paid ?></p>
 
                     </div>
                     <div class="right">
                         <h4 class="max">Application date</h4>
-                        <p class="min">12/2/2023</p>
+                        <p class="min"><?php echo $appaction_date->format("Y/m/d h:i:s a"); ?></p>
+                        <h4 class="max">First installment date</h4>
+                        <p class="min"><?php echo $installmentdate->format("Y/m/d h:i:s a"); ?></p>
                         <h4 class="max">Total installments</h4>
                         <p class="min"><?php echo $installments; ?></p>
-                        <h4 class="max">First installment date</h4>
-                        <p class="min">12/2/2023</p>
                         <h4 class="max">Installment amount monthly</h4>
-                        <p class="min"><?php echo number_format($monthly_installment, 2); ?></p>
+                        <p class="min">Ksh. <?php echo $monthly_installment; ?></p>
                     </div>
 
 
                 </div>
                 <div class="confirm_actions m-4 w-100 ">
-                    <button type="submit" name="proceed" class="btn btn-success">Proceed</button>
+                    <button type="submit" name="proceed" class="btn btn-success" onclick="sendloan()">Proceed</button>
                     <button type="submit" name="cancel" class="btn btn-danger">cancel</button>
                 </div>
             </div>
         </div>
     </div>
     <script src="./js/script.js"></script>
+    <script>
+        function sendloan(){
+            var xhtml = new XMLHttpRequest();
+            xhtml.open("POST", "php/loan_apply.php", true);
+            xhtml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            var params = `type=<?php echo $type; ?>&applicant=<?php echo $applicant; ?>&amount=<?php echo $amount; ?>&interest_rate=<?php echo $interest_rate; ?>&loan_id=<?php echo $loanid; ?>&period=<?php echo $duration; ?>&total_amount=<?php echo $total_amount_paid; ?>
+            &montly_installment=<?php echo $monthly_installment; ?>&total_interest=<?php echo $total_interest_paid; ?>&installments=<?php echo $installments; ?>`;
+            xhtml.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    console.log("status okay");
+                }
+            };
+            xhtml.send(params);
+        }
+    </script>
 </body>
 </html>
