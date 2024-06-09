@@ -1,6 +1,6 @@
 <?php
 
-require 'client.php';
+// require 'client.php';
 
 ?>
 
