@@ -33,6 +33,10 @@ $appaction_date = new DateTime();
 $installmentdate  = clone $appaction_date;
 $interval = new DateInterval("P1M");
 $installmentdate->add($interval);
+
+$params = "type=$type&applicant=$applicant&amount=$amount&interest_rate=$interest_rate&loan_id=$loanid&period=$duration&total_amount=$total_amount_paid&monthly_installment=$monthly_installment&total_interest=$total_interest_paid&installments=$installments";
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,14 +84,14 @@ $installmentdate->add($interval);
 
                 </div>
                 <div class="confirm_actions m-4 w-100 ">
-                    <button type="submit" name="proceed" class="btn btn-success" onclick="sendloan()">Proceed</button>
+                    <a href="php/loan_apply.php?<?php echo $params;?>" name="proceed" class="btn btn-success" >Proceed</a>
                     <button type="submit" name="cancel" class="btn btn-danger">cancel</button>
                 </div>
             </div>
         </div>
     </div>
     <script src="./js/script.js"></script>
-    <script>
+    <!-- <script>
         function sendloan(){
             var xhtml = new XMLHttpRequest();
             xhtml.open("POST", "php/loan_apply.php", true);
@@ -101,6 +105,6 @@ $installmentdate->add($interval);
             };
             xhtml.send(params);
         }
-    </script>
+    </script> -->
 </body>
 </html>

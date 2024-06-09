@@ -1,5 +1,5 @@
 <?php
-define("home", "http://localhost/loan%20system/customer/");
+define("home", "http://localhost:4200/custome/");
 if(!isset($_SESSION['token'])){
     header("location:".URL."login.php");
     exit();

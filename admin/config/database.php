@@ -1,5 +1,5 @@
 <?php
-define("home_admin", "http://localhost/loan%20system/admin/");
+define("home_admin", "http://localhost:4200/admin/");
 
 if(!isset($_SESSION['token']) && $_SESSION['usertype'] !== "admin"){
     header("location:".URL."login.php");
