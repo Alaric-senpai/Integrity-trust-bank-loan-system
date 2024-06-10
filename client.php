@@ -6,12 +6,16 @@ define("URL", "http://localhost:4200/");
 date_default_timezone_set('Africa/Nairobi');
 require 'vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+
 use MongoDB\Client;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 try{
-    $url = "mongodb+srv://ckagenou96:shadowatomic@cluster0.ontkwwd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+    $url = $_ENV['MONGO_URL'];
 
     $client = new MongoDB\Client($url);
 
