@@ -1,6 +1,5 @@
 <?php
-require 'client.php';
-session_start(); // Make sure session is started if not already
+require 'client.php'; // Make sure session is started if not already
 
 $users = $database->users;
 $login = $database->login_beta;

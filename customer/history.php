@@ -1,10 +1,8 @@
 <?php
 require '../client.php';
-if(!isset($_SESSION['token'])){
-    header("location: login.php");
-    exit();
-}
-$token = $_SESSION['token'];
+require 'config/database.php';
+
+$cursor = $userloan->find(['applicant' => $email]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,10 +19,10 @@ $token = $_SESSION['token'];
         <div class="content" id="content">
             <div class="navbar container-fluid text-bg-dark top-bar">
                 <div class="intro-top">
-                <i class="fa-solid fa-bars text-white menu-toggle bg-success p-1  rounded" id="toggler">Menu</i>
+                    <i class="fa-solid fa-bars text-white menu-toggle bg-success p-1 rounded" id="toggler">Menu</i>
                     Loan history
                 </div>
-                <div class="search-top d-flex  align-items-center justify-content-between me-2 ">
+                <div class="search-top d-flex align-items-center justify-content-between me-2">
                     <div class="form">
                         <form action="#" method="post" class="d-flex">
                             <input type="search" name="search" id="search" class="form-control">
@@ -32,56 +30,35 @@ $token = $_SESSION['token'];
                         </form>
                     </div>
                     <div class="account d-flex mx-1">
-                    <i class="fa-solid fa-user-tie text-white"></i>
-                    
+                        <i class="fa-solid fa-user-tie text-white"></i>
                     </div>
                 </div>
             </div>
            
-           <div class="history">
-            <div class="record p-2">
-                <h3>Loan amount Ksh. 5000</h3>
-                <p>Loan type: personal loan</p>
-                <p>Repayment status: paid</p>
-                <p>Repayment Schedule: Monthly</p>
-                <a type="button" href="./loan_details.php" class="btn btn-success">View details</a>
+            <div class="history">
+                <?php
+                // Check if there are any documents in the cursor
+                if ($cursor->isDead()) {
+                    ?>
+                    <div class="alert alert-info">
+                        No loan history
+                    </div>
+                    <?php
+                } else {
+                    foreach ($cursor as $history) {
+                        ?>
+                        <div class="record p-2">
+                            <h3>Loan amount: <?php echo number_format($history->amount); ?></h3>
+                            <p>Loan type: <?php echo $history->loan_type; ?></p>
+                            <p>Repayment status: <?php echo $history->loan_status; ?></p>
+                            <p>Repayment Schedule: Monthly</p>
+                            <a type="button" href="./loan_details.php?id=<?php echo $history->_id; ?>" class="btn btn-success">View details</a>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
             </div>
-            <div class="record p-2">
-                <h3>Loan amount Ksh. 5000</h3>
-                <p>Loan type: personal loan</p>
-                <p>Repayment status: paid</p>
-                <p>Repayment Schedule: Monthly</p>
-                <a type="button" href="./loan_details.php" class="btn btn-success">View details</a>
-            </div>
-            <div class="record p-2">
-                <h3>Loan amount Ksh. 5000</h3>
-                <p>Loan type: personal loan</p>
-                <p>Repayment status: paid</p>
-                <p>Repayment Schedule: Monthly</p>
-                <a type="button" href="./loan_details.php" class="btn btn-success">View details</a>
-            </div>
-            <div class="record p-2">
-                <h3>Loan amount Ksh. 5000</h3>
-                <p>Loan type: personal loan</p>
-                <p>Repayment status: paid</p>
-                <p>Repayment Schedule: Monthly</p>
-                <a type="button" href="./loan_details.php" class="btn btn-success">View details</a>
-            </div>
-            <div class="record p-2">
-                <h3>Loan amount Ksh. 5000</h3>
-                <p>Loan type: personal loan</p>
-                <p>Repayment status: paid</p>
-                <p>Repayment Schedule: Monthly</p>
-                <a type="button" href="./loan_details.php" class="btn btn-success">View details</a>
-            </div>
-            <div class="record p-2">
-                <h3>Loan amount Ksh. 5000</h3>
-                <p>Loan type: personal loan</p>
-                <p>Repayment status: paid</p>
-                <p>Repayment Schedule: Monthly</p>
-                <a type="button" href="./loan_details.php" class="btn btn-success">View details</a>
-            </div>
-           </div>
         </div>
     </div>
     <script src="./js/script.js"></script>

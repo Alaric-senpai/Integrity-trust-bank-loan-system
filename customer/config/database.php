@@ -1,5 +1,5 @@
 <?php
-define("home", "http://localhost:4200/custome/");
+define("home", "http://localhost:4200/customer/");
 if(!isset($_SESSION['token'])){
     header("location:".URL."login.php");
     exit();
@@ -21,4 +21,10 @@ $query = $login->findOne(
         ['email' => $email]
         );
         
-require 'loans.php';
+// require 'loans.php';
+function isLoanListNotEmpty($loan) {
+    $loanslist = $loan->find([]);
+    // Use iterator_to_array to check if the cursor has any documents
+    $loansArray = iterator_to_array($loanslist);
+    return !empty($loansArray);
+}

@@ -13,9 +13,10 @@ require './config/database.php';
     <?php require '../favicon.php'; ?>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .notice{
+        .noticer{
             position: fixed;
             top: 40px;
+            z-index: 1000;
             right: 40px;
             
         }
@@ -25,12 +26,10 @@ require './config/database.php';
     <div class="container-full">
         <?php require './config/sidebar.php'; require 'invalid.php'; ?>
         <div class="content" id="content">
-        <?php
+            <?php
             if(isset($_SESSION['loan_added'])){
-
-            
             ?>
-                <div class="alert alert-success alert-dismissible notice">
+                <div class="alert alert-success alert-dismissible noticer">
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     <strong>Success!</strong> <?php echo $_SESSION['loan_added']; ?>
                 </div>

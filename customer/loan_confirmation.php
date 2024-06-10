@@ -25,9 +25,9 @@ $monthly_installment = ($amount * $monthly_interest_rate) / (1 - pow(1 + $monthl
 $total_amount_paid = $monthly_installment * $duration;
 $total_interest_paid = $total_amount_paid - $amount;
 
-$total_amount_paid = number_format($total_amount_paid, 2);
-$total_interest_paid = number_format($total_interest_paid, 2);
-$monthly_installment = number_format($monthly_installment, 2);
+// $total_amount_paid = 
+// $total_interest_paid = 
+// $monthly_installment = 
 
 $appaction_date = new DateTime(); 
 $installmentdate  = clone $appaction_date;
@@ -65,9 +65,9 @@ $params = "type=$type&applicant=$applicant&amount=$amount&interest_rate=$interes
                         <h4 class="max">Duration</h4>
                         <p class="min"><?php echo $duration; ?> months</p>
                         <h4 class="max">Loan interest</h4>
-                        <p class="min">Ksh. <?php echo $total_interest_paid ?></p>
+                        <p class="min">Ksh. <?php echo number_format($total_interest_paid, 2); ?></p>
                         <h4 class="max">Total amount to pay</h4>
-                        <p class="min">Ksh. <?php echo $total_amount_paid ?></p>
+                        <p class="min">Ksh. <?php echo number_format($total_amount_paid, 2); ?></p>
 
                     </div>
                     <div class="right">
@@ -78,7 +78,7 @@ $params = "type=$type&applicant=$applicant&amount=$amount&interest_rate=$interes
                         <h4 class="max">Total installments</h4>
                         <p class="min"><?php echo $installments; ?></p>
                         <h4 class="max">Installment amount monthly</h4>
-                        <p class="min">Ksh. <?php echo $monthly_installment; ?></p>
+                        <p class="min">Ksh. <?php echo number_format($monthly_installment, 2); ?></p>
                     </div>
 
 
@@ -91,20 +91,6 @@ $params = "type=$type&applicant=$applicant&amount=$amount&interest_rate=$interes
         </div>
     </div>
     <script src="./js/script.js"></script>
-    <!-- <script>
-        function sendloan(){
-            var xhtml = new XMLHttpRequest();
-            xhtml.open("POST", "php/loan_apply.php", true);
-            xhtml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            var params = `type=<?php echo $type; ?>&applicant=<?php echo $applicant; ?>&amount=<?php echo $amount; ?>&interest_rate=<?php echo $interest_rate; ?>&loan_id=<?php echo $loanid; ?>&period=<?php echo $duration; ?>&total_amount=<?php echo $total_amount_paid; ?>
-            &montly_installment=<?php echo $monthly_installment; ?>&total_interest=<?php echo $total_interest_paid; ?>&installments=<?php echo $installments; ?>`;
-            xhtml.onreadystatechange = function(){
-                if(this.readyState == 4 && this.status == 200){
-                    console.log("status okay");
-                }
-            };
-            xhtml.send(params);
-        }
-    </script> -->
+    
 </body>
 </html>
