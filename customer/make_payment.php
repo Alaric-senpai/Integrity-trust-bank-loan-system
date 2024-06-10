@@ -56,7 +56,7 @@ $mothly_install = $loan_record['monthly_installment'];
                 <h1>Loan Agreement</h1>
                 <h6>Loan initiated on <?php echo $loandate; ?></h6>
                 <br><br>
-                <h3>Total Balance : Ksh. <?php echo $balance; ?></h3>
+                <h3>Total Balance : Ksh. <?php echo number_format($balance, 2); ?></h3>
 
                 <hr class="w-98 m-auto border-primary border-3">
 

@@ -11,9 +11,9 @@
                     <span class="link-holder text-white">
                         <i class="fa-solid fa-list-ul"></i><a href="explore.php">Explore</a>
                     </span>
-                    <span class="link-holder text-white">
+                    <!-- <span class="link-holder text-white">
                         <i class="fa-solid fa-credit-card"></i><a href="loan.php">Loan</a>
-                    </span>
+                    </span> -->
                     <span class="link-holder text-white">
                         <i class="fa-solid fa-clipboard-user"></i><a href="history.php">History</a>
                     </span>

@@ -1,67 +1,61 @@
 <?php
 require '../../client.php';
-
 require '../config/database.php';
 
-if(isset($_POST['pay'])){
-    //installment amount
-    $amount = $_POST['amount'];
+session_start();
 
-    // echo $amount;
-    // echo "<br>" . (float) $amount + (float) $amount ;
-    if(isset($_GET['id'])){
+if (isset($_POST['pay'])) {
+    // Installment amount
+    $amount = (float)$_POST['amount'];
+
+    if (isset($_GET['id'])) {
         $id = $_GET['id'];
-    }else{
-        header("location:" .home."loan_details.php");
+    } else {
+        header("location:" . home . "loan_details.php");
         exit();
     }
+
     $ObjectId = new MongoDB\BSON\ObjectId($id);
 
-    $findrecord = $userloan->findOne(
-        [
-            '_id' => $ObjectId 
-        ]
-    );
+    $findrecord = $userloan->findOne(['_id' => $ObjectId]);
+
+    if (!$findrecord) {
+        $message = "Record not found.";
+        $_SESSION['inst_ok'] = $message;
+        header("location:" . home . "loan_details.php?id=" . $id);
+        exit();
+    }
 
     $loan_id = $findrecord['loan_id'];
-    
-    $loanDetail = $loan->findOne(
-        [
-            '_id' => new MongoDB\BSON\ObjectId($loan_id)
-        ]
-    );
 
-    //principal amount 
+    $loanDetail = $loan->findOne(['_id' => new MongoDB\BSON\ObjectId($loan_id)]);
+
+    if (!$loanDetail) {
+        $message = "Loan detail not found.";
+        $_SESSION['inst_ok'] = $message;
+        header("location:" . home . "loan_details.php?id=" . $id);
+        exit();
+    }
+
+    // Principal amount 
     $principal = $loanDetail['amount'];
 
-    //monthly interest
+    // Monthly interest
     $monthly_intr = $findrecord['total_interest'] / $findrecord['installments'];
-    // echo "<br> montly interest" . $monthly_intr;
 
-    // var_dump($findrecord);
+    // Balance
+    $balance = isset($findrecord['balance']) ? $findrecord['balance'] : $findrecord['total_amount'];
+    $balance -= $amount;
 
-    if(isset($findrecord['balance'])){
-        $balance = $findrecord['balance'];
-    }else{
-
-        $balance = $findrecord['total_amount'];
-    }
-    // echo " <br>balance" .$balance;
-    //balance
-    $balance = $balance - $amount;
-    // echo " <br>balance" .$balance;
-    //installment_date
-    $installment_date = new Datetime();
+    // Installment date
+    $installment_date = new DateTime();
     $interval = new DateInterval("P1M");
     $next_installment = clone $installment_date;
-    //next_installment_date
     $next_installment->add($interval);
-
-    // $installment_date = $installment_date->getTimestamp()*1000 ;
-    // echo "<br>". $next_installment->format("d/m/Y h:i:s a");
-    //installment record
+    $next_date = new MongoDB\BSON\UTCDateTime($next_installment->getTimestamp() * 1000);
+    // Installment record
     $installment = [
-        'amount'=>$amount,
+        'amount' => $amount,
         'installment_date' => new MongoDB\BSON\UTCDateTime($installment_date->getTimestamp() * 1000),
         'next_installment' => new MongoDB\BSON\UTCDateTime($next_installment->getTimestamp() * 1000),
         'principal_amount' => $principal,
@@ -69,34 +63,41 @@ if(isset($_POST['pay'])){
     ];
 
     $makeinstallment = $userloan->updateOne(
+        ['_id' => $ObjectId],
         [
-            '_id'=> $ObjectId
-        ],
-        [
-            '$push'=>['transactions' => $installment]
-        ],
-        [
+            '$push' => ['transactions' => $installment],
             '$set' => ['balance' => $balance]
         ]
     );
 
-    if($makeinstallment->getModifiedCount() == 1){
-        $message = "Installment made sucessfully";
-        $_SESSION['inst_ok']= $message;
-        header("location:".home."loan_details.php?id=".$id);
-        exit();
-    }else{
-        $message = "Installment not made erros available";
-        // echo $message;
-        $_SESSION['inst_ok']= $message;
-        header("location:".home."loan_details.php?id=".$id);
+    if ($makeinstallment->getModifiedCount() == 1) {
+        $next_date_set = $userloan->updateOne(
+            ['_id' => $ObjectId],
+            ['$set' => ['next_date' => $next_date]]
+        );
+
+        if($next_date_set->getModifiedCount() == 1){
+
+            $message = "Installment made successfully.";
+            $_SESSION['inst_ok'] = $message;
+            header("location:" . home . "loan_details.php?id=" . $id);
+            exit();
+        }else{
+
+            $message = "Installment date add failed.";
+            $_SESSION['inst_ok'] = $message;
+            header("location:" . home . "loan_details.php?id=" . $id);
+            exit();
+        }
+    } else {
+        $message = "Installment not made, errors available.";
+        $_SESSION['inst_ok'] = $message;
+        header("location:" . home . "loan_details.php?id=" . $id);
         exit();
     }
-
-
-}else{
-    $message = "Submission method has errors";
-        $_SESSION['inst_ok']= $message;
-        header("location:".home."loan_details.php?id=".$id);
-        exit();
+} else {
+    $message = "Submission method has errors.";
+    $_SESSION['inst_ok'] = $message;
+    header("location:" . home . "loan_details.php?id=" . $id);
+    exit();
 }

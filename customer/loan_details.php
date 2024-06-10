@@ -23,32 +23,30 @@ $loan_exist = $loan->findOne(
 
 $transactions = $loan_record['transactions'];
 $loan_amount = (int)$loan_exist['amount'];
-// $loan_interest = $loan_exist['interest_rate'];
-// $loan_duration = $loan_exist['loan_duration'];
-// $loan_type  = $loan_exist['type'];
+
 $installments = (int)$loan_record['installments'];
-// $month_installment = $loan_record['monthly_installment'];
+
 $total_amnt =  (int)$loan_record['total_amount'];
-// $loan_date = $loan_record['loan_date'];
+
 
 $month_intr = number_format(($total_amnt- $loan_amount)/$installments, 2);
 
-// echo "\$loan_amount (Loan Amount): " . $loan_exist['amount'] . "<br>";
-// echo "\$loan_interest (Interest Rate): " . $loan_exist['interest_rate'] . "<br>";
-// echo "\$loan_duration (Loan Duration): " . $loan_exist['loan_duration'] . "<br>";
-// echo "\$loan_type (Loan Type): " . $loan_exist['type'] . "<br>";
-// echo "\$installments (Installments): " . $loan_record['installments'] . "<br>";
-// echo "\$month_installment (Monthly Installment): " . $loan_record['monthly_installment'] . "<br>";
-// echo "\$total_amnt (Total Amount): " . $loan_record['total_amount'] . "<br>";
-// echo "\$loan_date (Loan Date): " . $loan_record['loan_date'] . "<br>";
+if(isset($loan_record['next_date'])){
+    $next_date = $loan_record['next_date']->toDateTime()->format("d/m/Y");
+}else{
+    $next_date="next month";
+}
 
-// var_dump($loan_record);
+if(isset($loan_record['balance'])){
+    $balance = $loan_record['balance'];
+}else{
+    $balance = $loan_record['amount'];
+}
 
-// echo "<br>";
 
-// var_dump($loan_exist);
 
-// die()
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +58,7 @@ $month_intr = number_format(($total_amnt- $loan_amount)/$installments, 2);
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/loan.css">
     <style>
-        .notice{
+        .noticer{
             position: fixed;
             top: 40px;
             z-index: 1000;
@@ -76,7 +74,7 @@ $month_intr = number_format(($total_amnt- $loan_amount)/$installments, 2);
         <?php
             if(isset($_SESSION['inst_ok'])){
             ?>
-                <div class="alert alert-success alert-dismissible notice">
+                <div class="alert alert-success alert-dismissible noticer">
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     <strong>Success!</strong> <?php echo $_SESSION['inst_ok']; ?>
                 </div>
@@ -109,11 +107,11 @@ $month_intr = number_format(($total_amnt- $loan_amount)/$installments, 2);
                 <div class="loan-schedule loan-holder">
                     <div class="due-date">
                         <h5>Next installment date</h5>
-                        <p>12/2/2024</p>
+                        <p><?php echo $next_date;  ?></p>
                     </div>
                     <div class="balance">
                         <h5>Remaining Balance</h5>
-                        <p>Ksh. 5000</p>
+                        <p>Ksh. <?php echo number_format($balance ,2) ?></p>
                     </div>
                 </div>
             </div>
@@ -132,37 +130,39 @@ $month_intr = number_format(($total_amnt- $loan_amount)/$installments, 2);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
+    <?php
+    if (!empty($transactions)) {
+        $counter = 1;
+        foreach ($transactions as $transaction) {
+            $installment_date = $transaction['installment_date']->toDateTime()->format("d/m/Y");
+            $next_date = $transaction['next_installment']->toDateTime()->format("d/m/Y");
+            $_SESSION['next'] = $next_date;
+            $installment_amount = $transaction['amount'];
+            $principal_amount = $transaction['principal_amount'];
+            $interest_amount = $transaction['monthly_interest'];
+            // $remaining_balance = isset($transaction['balance']) ? $transaction['balance'] : 0; // Assuming balance is present in some transactions
 
-                        if(is_array($transactions) && !empty($transactions)){
+            ?>
+            <tr>
+                <td><?php echo $counter++; ?></td>
+                <td><?php echo $installment_date; ?></td>
+                <td><?php echo number_format($installment_amount,2); ?></td>
+                <td>Ksh. <?php echo number_format($principal_amount); ?></td>
+                <td>Ksh. <?php echo number_format($interest_amount); ?></td>
+                <td>Ksh. <?php echo number_format( $loan_record['balance'],2) ?></td>
+            </tr>
+            <?php
+        }
+    } else {
+    ?>
+        <tr>
+            <td colspan="6" class="bg-info">No transaction records</td>
+        </tr>
+    <?php
+    }
+    ?>
+</tbody>
 
-                            foreach($transactions as $transaction){
-
-                                $installmentdate = $transaction['installment_date'];
-                                $phpdate =$installmentdate->toDateTime();
-                                $installmentdate = $phpdate->format("d/m/Y");
-                            
-
-                        ?>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><?php echo $installmentdate; ?></td>
-                            <td><?php echo $transaction['inst_amount']; ?></td>
-                            <td>Ksh. <?php echo $loan_record['balance']; ?></td>
-                            <td>Ksh. <?php echo $month_intr; ?></td>
-                            <td>Ksh. <?php echo number_format(($loan_record['balance'])); ?></td>
-                        </tr>
-                        <?php
-                            }
-                        }else{
-                            ?>
-                            <tr>
-                                <td colspan="6" class="alert alert-info">no transaction records</td>
-                            </tr>
-                            <?php
-                        }
-                        ?>
-                    </tbody>
                 </table>
             </div>
             <div class="manage-actions text-bg-dark w-98">
