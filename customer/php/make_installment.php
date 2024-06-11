@@ -59,6 +59,7 @@ if (isset($_POST['pay'])) {
         'installment_date' => new MongoDB\BSON\UTCDateTime($installment_date->getTimestamp() * 1000),
         'next_installment' => new MongoDB\BSON\UTCDateTime($next_installment->getTimestamp() * 1000),
         'principal_amount' => $principal,
+        'balance' => $balance,
         'monthly_interest' => $monthly_intr
     ];
 

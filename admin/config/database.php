@@ -8,11 +8,12 @@ if(!isset($_SESSION['token']) && $_SESSION['usertype'] !== "admin"){
 // $token = $_SESSION['token'];
 $users = $database->users;
 $login = $database->login;
+$login_beta = $database->login_beta;
 $loan = $database->loans;
 $admintb = $database->admin;
 $token = $_SESSION['token'];
 
-$query = $login->findOne(
+$query = $login_beta->findOne(
     ['token' => $token]
 );
 

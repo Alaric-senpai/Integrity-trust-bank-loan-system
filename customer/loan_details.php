@@ -140,7 +140,7 @@ if(isset($loan_record['balance'])){
             $installment_amount = $transaction['amount'];
             $principal_amount = $transaction['principal_amount'];
             $interest_amount = $transaction['monthly_interest'];
-            // $remaining_balance = isset($transaction['balance']) ? $transaction['balance'] : 0; // Assuming balance is present in some transactions
+            $remaining_balance = isset($transaction['balance']) ? $transaction['balance'] : $balance; // Assuming balance is present in some transactions
 
             ?>
             <tr>
@@ -149,7 +149,7 @@ if(isset($loan_record['balance'])){
                 <td><?php echo number_format($installment_amount,2); ?></td>
                 <td>Ksh. <?php echo number_format($principal_amount); ?></td>
                 <td>Ksh. <?php echo number_format($interest_amount); ?></td>
-                <td>Ksh. <?php echo number_format( $loan_record['balance'],2) ?></td>
+                <td>Ksh. <?php echo number_format( $remaining_balance,2) ?></td>
             </tr>
             <?php
         }
@@ -168,7 +168,23 @@ if(isset($loan_record['balance'])){
             <div class="manage-actions text-bg-dark w-98">
                 <h4>Manage options</h4>
                 <div class="row-top grid-2">
+                    <?php
+                    if($balance > 0){
+                        $loadncomplete = $userloan->updateOne(
+                            ['_id' => $objectid],
+                            ['$set' => ['status' => "Paid"]]
+                        );
+                    
+                    ?>
                     <a type="button"  href="./make_payment.php?id=<?php echo $loan_record['_id']; ?>" class="btn btn-success w-100">Make a payment</a>
+                    <?php
+                    }else{
+                        ?>
+                        <p>Loan is cleared</p>
+                        <?php
+                    
+                    }
+                    ?>
                     <button type="button"  href="#" class="btn btn-success w-100">request bank statement</a>
                 </div>
                 <div class="row-top grid-2 mb-2">

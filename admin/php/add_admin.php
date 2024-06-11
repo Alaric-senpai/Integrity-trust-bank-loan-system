@@ -49,7 +49,7 @@ if (isset($_POST['add']) && $_SERVER['REQUEST_METHOD'] === "POST") {
 
     if ($insertadmin) {
         // Proceed to insert into the login collection
-        $loginadmin = $login->insertOne([
+        $loginadmin = $login_beta->insertOne([
             'email' => $admail,
             'password' => $hashpass,
             'token' => $adtoken,

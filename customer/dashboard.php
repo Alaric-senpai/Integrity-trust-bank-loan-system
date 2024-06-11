@@ -2,7 +2,7 @@
 require '../client.php';
 require 'config/database.php';
 
-
+$loancount = $userloan->countDocuments(['applicant' => $email]);
 
 ?>
 <!DOCTYPE html>
@@ -64,19 +64,28 @@ require 'config/database.php';
             <div class="rows w-98">
                 <div class="s-card">
                     <h3>Total loans</h3>
-                    <p>23</p>
+                    <p><?php echo $loancount ?></p>
                 </div>
                 <div class="s-card">
                     <h3>Credit score</h3>
                     <p>100%</p>
                 </div>
                 <div class="s-card">
-                    <H3>Pending loans</H3>
-                    <h2>5</h2>
+                    <H3>User status</H3>
+                    <h2><?php echo "active"; ?></h2>
                 </div>
                 <div class="s-card">
                     <h3>Loan eligibility</h3>
-                    <p>not eligible</p>
+                    <p> eligible</p>
+                </div>
+            </div>
+
+            <div class="details gx-1 d-grid w-98">
+                <div class="col text-bg-dark rounded-2">
+                    hello
+                </div>
+                <div class="col text-bg-dark rounded-2">
+                    hello
                 </div>
             </div>
         </div>

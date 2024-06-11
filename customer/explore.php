@@ -111,9 +111,9 @@ require './config/database.php';
                 }
                 ?>
             </div>
-            <div class="more w-100 d-flex alin-items-center justify-content-center">
+            <!-- <div class="more w-100 d-flex alin-items-center justify-content-center">
                 <a href="./loan.php" class="btn ">Custom loan</a>
-            </div>
+            </div> -->
         </div>
     </div>
     <script src="./js/script.js"></script>

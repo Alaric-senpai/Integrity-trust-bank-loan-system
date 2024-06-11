@@ -1,6 +1,14 @@
 <?php
 require '../client.php';
 require './config/database.php';
+
+
+$loancount = $loan->countDocuments();
+
+$customercount = $users->countDocuments(
+    ['usertype' => 'customer']
+);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,11 +30,11 @@ require './config/database.php';
                 <div class="row text-white g-2">
                     <div class="col4">
                         <h3>Registered loans</h3>
-                        <p>300+</p>
+                        <p><?php echo $loancount; ?></p>
                     </div>
                     <div class="col4">
                         <h3>Registered customers</h3>
-                        <p>12+</p>
+                        <p><?php echo $customercount; ?></p>
                     </div>
                     <div class="col4">
                         <h3>Total income</h3>
