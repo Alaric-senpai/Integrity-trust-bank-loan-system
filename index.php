@@ -38,7 +38,7 @@
                         <li class="nav-item"><a href="#" class="nav-link">Contatct</a></li>
                     </ul>
                     <a href="./login.php" class="btn-primary btn pp-2">Login</a>
-                    <a href="./signup.php" class="btn btn-success pp-2">Signup</a>
+                    <a href="./signup.html" class="btn btn-success pp-2">Signup</a>
                 
             </div>
         </div>

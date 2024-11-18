@@ -19,6 +19,11 @@ if (pathinfo($file, PATHINFO_EXTENSION) === 'js' && file_exists($file)) {
     readfile($file);
     exit;
 }
+if (pathinfo($file, PATHINFO_EXTENSION) === 'css' && file_exists($file)) {
+    header('Content-Type: text/css');
+    readfile($file);
+    exit;
+}
 
 // If the file does not exist, return 404 Not Found
 http_response_code(404);

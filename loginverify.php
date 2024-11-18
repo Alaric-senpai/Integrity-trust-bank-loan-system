@@ -1,5 +1,5 @@
 <?php
-require 'client.php'; // Make sure session is started if not already
+require 'client.php'; // Ensure this file initializes $database and starts a session
 
 $users = $database->users;
 $login = $database->login_beta;
@@ -13,22 +13,34 @@ if (isset($_POST['login'])) {
         $loginuser = $users->findOne(['email' => $email]);
 
         if ($loginuser) {
+            // Convert BSONDocument to an array for easier access
+            $loginuserArray = (array)$loginuser;
+
+            // Debugging (optional): Print user details for verification
+            // Remove this in production
+            echo "<pre>";
+            print_r($loginuserArray);
+            echo "</pre>";
+            // Remove or comment out the die() after testing
+            // die();
+
             // Find the user in the login collection
             $loginDetails = $login->findOne(['email' => $email]);
-            
+
             if ($loginDetails) {
-                $hashedPassword = $loginDetails['password'];
+                $loginDetailsArray = (array)$loginDetails;
+                $hashedPassword = $loginDetailsArray['password'];
 
                 if (password_verify($password, $hashedPassword)) {
                     try {
-                        $token = $loginDetails['token'];
+                        $token = $loginDetailsArray['token'];
                         $_SESSION['token'] = $token;
-                        $_SESSION['usertype'] = $loginuser['usertype']; // Store usertype in session
+                        $_SESSION['usertype'] = $loginuserArray['usertype']; // Store usertype in session
 
-                        if ($loginuser['usertype'] == "customer") {
+                        if ($loginuserArray['usertype'] == "customer") {
                             header("Location: customer/dashboard.php");
                             exit();
-                        } elseif ($loginuser['usertype'] == "admin") {
+                        } elseif ($loginuserArray['usertype'] == "admin") {
                             header("Location: admin/dashboard.php");
                             exit();
                         }
@@ -52,7 +64,9 @@ if (isset($_POST['login'])) {
             exit();
         }
     } catch (Exception $e) {
-        printf("Error: %s", $e->getMessage());
+        $_SESSION['error'] = $e->getMessage();
+        header("Location: login.php");
+        exit();
     }
 } else {
     header("Location: index.php");

@@ -15,3 +15,4 @@
 
 <!-- icon links  -->
 <script src="https://kit.fontawesome.com/d9027f3ce0.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/primeflex/3.3.1/primeflex.css" integrity="sha512-NWXz12Cy/aQqoOkg0tI4GPhCuPeZh9jIXa3kmrEpA/BsNYKtqZtxVnSavBPnJo6iSbqtK9xYVfrBXydZBxuA0A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
