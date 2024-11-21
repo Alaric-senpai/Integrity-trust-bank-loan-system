@@ -2,5 +2,5 @@
 require '../client.php';
 
 session_destroy();
-header("location:".URL."index.php");
+header("location:".URL."login.php");
 exit();

@@ -16,7 +16,7 @@ require 'client.php';
     <div >
     <form action="./loginverify.php" method="post" class="shadow-4 border-round-xl p-3 w-11 m-auto md:w-8 lg:w-5  text-center md:mt-7 surface-overlay" >
         <div class="">
-            <a href="index.php" class="f-bold m-2 fs-1 text-decoration-none">Integrity Trust Bank</a>
+            <a href="index.html" class="f-bold m-2 fs-1 text-decoration-none">Integrity Trust Bank</a>
             <h3 class="h1 w-100 text-center f-bold fs-1 lh-1">LOGIN</h3>
         </div>
         <div class="mb-3 field">

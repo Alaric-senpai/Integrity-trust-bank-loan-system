@@ -28,13 +28,12 @@ $installments = (int)$loan_record['installments'];
 
 $total_amnt =  (int)$loan_record['total_amount'];
 
-
-$month_intr = number_format(($total_amnt- $loan_amount)/$installments, 2);
+$month_intr = number_format(($total_amnt - $loan_amount)/$installments, 2);
 
 if(isset($loan_record['next_date'])){
     $next_date = $loan_record['next_date']->toDateTime()->format("d/m/Y");
 }else{
-    $next_date="next month";
+    $next_date = "next month";
 }
 
 if(isset($loan_record['balance'])){
@@ -43,10 +42,13 @@ if(isset($loan_record['balance'])){
     $balance = $loan_record['amount'];
 }
 
-
-
-
-
+// Update loan status if balance is 0 or less
+if($balance <= 0){
+    $loanComplete = $userloan->updateOne(
+        ['_id' => $objectid],
+        ['$set' => ['status' => "Paid"]]
+    );
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +65,6 @@ if(isset($loan_record['balance'])){
             top: 40px;
             z-index: 1000;
             right: 40px;
-            
         }
     </style>
 </head>
@@ -81,11 +82,11 @@ if(isset($loan_record['balance'])){
             <?php
             unset($_SESSION['inst_ok']);
             }
-            ?>
-            <div class="loan-infromation text-bg-dark w-98 ">
+        ?>
+            <div class="loan-infromation text-bg-dark w-98">
                 <h3>Loan information</h3>
                 <div class="info-details loan-holder">
-                    <div class="loan-type ">
+                    <div class="loan-type">
                         <h5>Loan type</h5>
                         <p><?php echo $loan_record['loan_type']; ?></p>
                     </div>
@@ -107,11 +108,11 @@ if(isset($loan_record['balance'])){
                 <div class="loan-schedule loan-holder">
                     <div class="due-date">
                         <h5>Next installment date</h5>
-                        <p><?php echo $next_date;  ?></p>
+                        <p><?php echo $next_date; ?></p>
                     </div>
                     <div class="balance">
                         <h5>Remaining Balance</h5>
-                        <p>Ksh. <?php echo number_format($balance ,2) ?></p>
+                        <p>Ksh. <?php echo number_format($balance, 2) ?></p>
                     </div>
                 </div>
             </div>
@@ -119,7 +120,6 @@ if(isset($loan_record['balance'])){
                 <h4>Repayment schedule</h4>
                 <table class="table table-dark p-2 table-hover">
                     <thead>
-                        </tr>
                         <tr>
                             <td scope="col">#</td>
                             <td scope="col">Installment date</td>
@@ -130,66 +130,52 @@ if(isset($loan_record['balance'])){
                         </tr>
                     </thead>
                     <tbody>
-    <?php
-    if (!empty($transactions)) {
-        $counter = 1;
-        foreach ($transactions as $transaction) {
-            $installment_date = $transaction['installment_date']->toDateTime()->format("d/m/Y");
-            $next_date = $transaction['next_installment']->toDateTime()->format("d/m/Y");
-            $_SESSION['next'] = $next_date;
-            $installment_amount = $transaction['amount'];
-            $principal_amount = $transaction['principal_amount'];
-            $interest_amount = $transaction['monthly_interest'];
-            $remaining_balance = isset($transaction['balance']) ? $transaction['balance'] : $balance; // Assuming balance is present in some transactions
-
-            ?>
-            <tr>
-                <td><?php echo $counter++; ?></td>
-                <td><?php echo $installment_date; ?></td>
-                <td><?php echo number_format($installment_amount,2); ?></td>
-                <td>Ksh. <?php echo number_format($principal_amount); ?></td>
-                <td>Ksh. <?php echo number_format($interest_amount); ?></td>
-                <td>Ksh. <?php echo number_format( $remaining_balance,2) ?></td>
-            </tr>
-            <?php
-        }
-    } else {
-    ?>
-        <tr>
-            <td colspan="6" class="bg-info">No transaction records</td>
-        </tr>
-    <?php
-    }
-    ?>
-</tbody>
-
+                    <?php
+                    if (!empty($transactions)) {
+                        $counter = 1;
+                        foreach ($transactions as $transaction) {
+                            $installment_date = $transaction['installment_date']->toDateTime()->format("d/m/Y");
+                            $next_date = $transaction['next_installment']->toDateTime()->format("d/m/Y");
+                            $_SESSION['next'] = $next_date;
+                            $installment_amount = $transaction['amount'];
+                            $principal_amount = $transaction['principal_amount'];
+                            $interest_amount = $transaction['monthly_interest'];
+                            $remaining_balance = isset($transaction['balance']) ? $transaction['balance'] : $balance;
+                            ?>
+                            <tr>
+                                <td><?php echo $counter++; ?></td>
+                                <td><?php echo $installment_date; ?></td>
+                                <td><?php echo number_format($installment_amount, 2); ?></td>
+                                <td>Ksh. <?php echo number_format($principal_amount); ?></td>
+                                <td>Ksh. <?php echo number_format($interest_amount); ?></td>
+                                <td>Ksh. <?php echo number_format($remaining_balance, 2) ?></td>
+                            </tr>
+                            <?php
+                        }
+                    } else {
+                        ?>
+                        <tr>
+                            <td colspan="6" class="bg-info">No transaction records</td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                    </tbody>
                 </table>
             </div>
             <div class="manage-actions text-bg-dark w-98">
                 <h4>Manage options</h4>
                 <div class="row-top grid-2">
-                    <?php
-                    if($balance > 0){
-                        $loadncomplete = $userloan->updateOne(
-                            ['_id' => $objectid],
-                            ['$set' => ['status' => "Paid"]]
-                        );
-                    
-                    ?>
-                    <a type="button"  href="./make_payment.php?id=<?php echo $loan_record['_id']; ?>" class="btn btn-success w-100">Make a payment</a>
-                    <?php
-                    }else{
-                        ?>
+                    <?php if($balance > 0) { ?>
+                        <a href="./make_payment.php?id=<?php echo $id; ?>" class="btn btn-success w-100">Make a payment</a>
+                    <?php } else { ?>
                         <p>Loan is cleared</p>
-                        <?php
-                    
-                    }
-                    ?>
-                    <button type="button"  href="#" class="btn btn-success w-100">request bank statement</a>
+                    <?php } ?>
+                    <button class="btn btn-success w-100">Request bank statement</button>
                 </div>
                 <div class="row-top grid-2 mb-2">
-                    <a type="button"  href="" class="btn btn-success w-100">Modify repayment schedule</a>
-                    <a type="button"  href="./customer_support.php" class="btn btn-success w-100">Contact customer support</a>
+                    <a href="" class="btn btn-success w-100">Modify repayment schedule</a>
+                    <a href="./customer_support.php" class="btn btn-success w-100">Contact customer support</a>
                 </div>
             </div>
         </div>

@@ -62,7 +62,7 @@ require './config/database.php';
                             <img src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6604c77b1b4bd658a_profilephoto5.jpeg" alt="">
                         </div>
                         <div class="pic-details">
-                            <p class="username">Loanuser1</p>
+                            <p class="username"> <?php echo $user['firstname']  ?> </p>
                             <a href="#">Change profile pic</a>
                         </div>
                     </div>

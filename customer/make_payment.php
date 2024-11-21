@@ -67,7 +67,7 @@ $mothly_install = $loan_record['monthly_installment'];
                     </div> -->
                     <div class="mb-3 d-flex align-items-center flex-10 w-100 p-2">
                         <label for="amount" class="form-label">Amount</label>
-                        <input type="text" name="amount" id="amount" required class="form-control w-50" value="<?php echo $mothly_install; ?>" readonly >
+                        <input type="text" name="amount" id="amount" required class="form-control w-50" value="<?php echo $mothly_install; ?>"  >
                     </div>
                     <div class="mb-3 d-flex flex-10 w-100">
                         <button type="submit" class="btn btn-success" name="pay">confirm payment</button>
