@@ -26,8 +26,11 @@ try {
     // MongoDB connection URL from environment variables
     $url = $_ENV['MONGO_URL'];
 
+    // echo $url;
+
     // Initialize MongoDB client
     $client = new Client($url);
+
 
     // Select the database
     $database = $client->selectDatabase("integrity_bank");
